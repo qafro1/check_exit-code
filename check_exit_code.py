@@ -40,12 +40,7 @@ except IOError:
     print "Cannot open the file. Check if it exists and you have the right permissions to open it."
     exit(1)
 
-# check exit code
-if args.exitcode:
-    logfile = f.read()
-    if not re.search("exit 0", logfile, flags=re.I):
-        print "CRITICAL: Exit code not found in File %s" % log
-        exit(2)
+
 
 # Check last file modification time
 if args.time:
@@ -59,7 +54,7 @@ if args.time:
     # Time in minutes since last modification of file
     last_time = (t - file_mod_time) / 60
 
-    if last_time > args.time:
+    if last_time < args.time:
         print "CRITICAL: {} last modified {:.2f} minutes. Threshold set to {:.2f} minutes".format(log, last_time,
                                                                                                   args.time)
         exit(2)
